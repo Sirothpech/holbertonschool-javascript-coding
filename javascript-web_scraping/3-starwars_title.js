@@ -8,8 +8,8 @@ request.get(url, (error, response, body) => {
     console.error(error);
   } else {
     if (response.statusCode === 200) {
-    const movieData = JSON.parse(body);
-    console.log(movieData.title);
+      const movieData = JSON.parse(body);
+      console.log(movieData.title);
     }
   }
 });
