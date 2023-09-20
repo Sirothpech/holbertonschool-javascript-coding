@@ -7,7 +7,5 @@ const text = process.argv[3]; // Spécifier le texte à écrire
 fs.writeFile(filePath, text, 'utf-8', (error) => {
   if (error) {
     console.error(error); // Afficher l'erreur si elle se produit
-  } else {
-    console.log("Writing success"); // Afficher le contenu du fichier lu
   }
 });
