@@ -4,10 +4,12 @@ function countStudents(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
     const lines = data.split('\n').filter((line) => line);
+
     const fields = {};
     let students = 0;
 
-    lines.forEach((line) => {
+    for (let index = 1; index < lines.length; index++) { // Exclure la première ligne (en-tête)
+      const line = lines[index];
       const student = line.split(',');
       if (!fields[student[3]]) {
         fields[student[3]] = [];
@@ -16,7 +18,7 @@ function countStudents(path) {
         fields[student[3]].push(student[0]);
         students += 1;
       }
-    });
+    }
 
     console.log(`Number of students: ${students}`);
     for (const field in fields) {
@@ -29,7 +31,5 @@ function countStudents(path) {
     console.error(`Cannot load the database: ${err}`);
   }
 }
-
-countStudents('database.csv');
 
 module.exports = countStudents;
