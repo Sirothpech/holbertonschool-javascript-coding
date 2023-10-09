@@ -3,32 +3,37 @@ const fs = require('fs');
 function countStudents(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
-    const lines = data.split('\n').filter((line) => line);
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-    const fields = {};
-    let students = 0;
+    let index = 1; // Commencez à partir de la deuxième ligne (l'indice 1)
+    const totalStudents = lines.length - 1; // Soustrayez 1 pour exclure l'en-tête
+    const studentsByField = {};
 
-    for (let index = 1; index < lines.length; index++) { // Exclure la première ligne (en-tête)
-      const line = lines[index];
-      const student = line.split(',');
-      if (!fields[student[3]]) {
-        fields[student[3]] = [];
+    while (index < lines.length) {
+      const [firstname, , , field] = lines[index].split(',');
+
+      if (field in studentsByField) {
+        studentsByField[field].count += 1;
+        studentsByField[field].list.push(firstname);
+      } else {
+        studentsByField[field] = {
+          count: 1,
+          list: [firstname],
+        };
       }
-      if (student[0]) {
-        fields[student[3]].push(student[0]);
-        students += 1;
-      }
+
+      index += 1;
     }
 
-    console.log(`Number of students: ${students}`);
-    for (const field in fields) {
-      if (Object.prototype.hasOwnProperty.call(fields, field)) {
-        const list = fields[field].join(', ');
-        console.log(`Number of students in ${field}: ${fields[field].length}. List: ${list}`);
+    console.log(`Number of students: ${totalStudents}`);
+
+    for (const field in studentsByField) {
+      if (Object.prototype.hasOwnProperty.call(studentsByField, field)) {
+        console.log(`Number of students in ${field}: ${studentsByField[field].count}. List: ${studentsByField[field].list.join(', ')}`);
       }
     }
-  } catch (err) {
-    console.error(`Cannot load the database: ${err}`);
+  } catch (error) {
+    throw new Error('Cannot load the database');
   }
 }
 
