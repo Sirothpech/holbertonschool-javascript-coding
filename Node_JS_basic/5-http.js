@@ -30,7 +30,7 @@ function countStudents(path) {
 
       const totalStudents = lines.length;
 
-      const output = [`Number of students: ${totalStudents}`];
+      const output = [`Number of students: ${totalStudents}`]; // Crée un tableau de chaînes de caractères
 
       for (const field in studentsByField) {
         if (Object.hasOwnProperty.call(studentsByField, field)) {
@@ -49,16 +49,16 @@ const app = http.createServer((req, res) => {
   if (req.url === '/') {
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    countStudents(databasePath)
-    .then((data) => {
-      res.end(`This is the list of our students\n${data}`);
-    })
-    .catch(() => {
-      res.end('This is the list of our students\nCannot load the database');
-    });
-} else {
-  res.end('Invalid URL');
-}
+    countStudents(databasePath) // Appel de la fonction countStudents
+      .then((data) => {
+        res.end(`This is the list of our students\n${data}`);
+      })
+      .catch(() => {
+        res.end('This is the list of our students\nCannot load the database');
+      });
+  } else {
+    res.end('Invalid URL');
+  }
 });
 
 app.listen(1245);
