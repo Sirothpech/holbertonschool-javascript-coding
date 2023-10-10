@@ -7,31 +7,24 @@ function readDatabase(filePath) {
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
         reject(Error(err));
-      }
+      } else {
+        const lines = data.trim().split('\n');
+        lines.shift(); // Supprimer l'en-tête
 
-      const lines = data.trim().split('\n').slice(1); // Remove empty lines and header
-      const studentsByField = {};
+        const studentsByField = {};
 
-      lines.forEach((line) => {
-        const [firstname, , , field] = line.split(',');
+        for (const line of lines) {
+          const [firstname, , , field] = line.split(',');
 
-        if (!studentsByField[field]) {
-          studentsByField[field] = {
-            count: 1,
-            list: [firstname],
-          };
-        } else {
-          studentsByField[field].count += 1;
-          studentsByField[field].list.push(firstname);
+          if (!studentsByField[field]) {
+            studentsByField[field] = [firstname];
+          } else {
+            studentsByField[field].push(firstname);
+          }
         }
-      });
 
-      const formattedData = {
-        totalStudents: lines.length,
-        studentsByField,
-      };
-
-      resolve(formattedData);
+        resolve(studentsByField);
+      }
     });
   });
 }
